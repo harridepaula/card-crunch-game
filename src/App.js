@@ -24,6 +24,8 @@ function App() {
         setTurns(0)
     }
 
+    console.log(cards, turns)
+
     return (
         <div className="App">
             <h1>Card Crunch</h1>
