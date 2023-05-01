@@ -1,10 +1,10 @@
 import './SingleCard.css'
 
-function SingleCard({card}) {
+function SingleCard({ card, handleChoice }) {
 
-    const handleClick = () => {
-        
-    }
+  const handleClick = () => {
+    handleChoice(card);
+  };
 
   return (
     <div className="card" key={card.id}>
