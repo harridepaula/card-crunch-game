@@ -1,5 +1,5 @@
 // Import the 'useState' hook from the 'react' module and CSS files
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import SingleCard from './components/SingleCard'
 
@@ -18,6 +18,8 @@ function App() {
     // Define two state variables: 'cards' to store the shuffled cards and 'turns' to store the number of turns taken
     const [cards, setCards] = useState([])
     const [turns, setTurns] = useState(0)
+    const [choiceOne, setChoiceOne] = useState(null)
+    const [choiceTwo, setChoiceTwo] = useState(null)
 
     // Define a function that shuffles the 'cardImages' array, duplicates it, assigns a random ID to each card, and sets the resulting array as the new state of 'cards'
     const shuffleCards = () => {
@@ -30,7 +32,30 @@ function App() {
         setTurns(0)
     }
 
-    console.log(cards, turns) // Log the current 'cards' and 'turns' state variables to the console
+    // Handle a choice
+    const handleChoice = (card) => {
+        choiceOne ? setChoiceTwo(card) : setChoiceOne(card)
+    }
+
+    //Compare 2 selected cards
+    useEffect(() => {
+        if (choiceOne && choiceTwo) {
+            if (choiceOne.src === choiceTwo.src) {
+                console.log("those cards match!!")
+                resetTurn()
+            } else {
+            console.log("those cards do not match")
+            resetTurn()
+            }
+        }
+    }, [choiceOne, choiceTwo])
+
+    // Reset choices and increase turn
+    const resetTurn = () => {
+        setChoiceOne(null)
+        setChoiceTwo(null)
+        setTurns(prevTurns => prevTurns + 1)
+    }
 
     // Render the App component
     return (
@@ -39,9 +64,12 @@ function App() {
             <button onClick={shuffleCards}>New Game</button>
 
             <div className="card-grid">
-                {/* Map over the 'cards' state variable and render a 'SingleCard' component for each card */}
                 {cards.map(card => (
-                    <SingleCard key={card.id} card={card} />
+                    <SingleCard
+                        key={card.id}
+                        card={card}
+                        handleChoice={handleChoice}
+                    />
                 ))}
             </div>
         </div>
