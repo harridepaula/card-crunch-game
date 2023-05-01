@@ -5,12 +5,12 @@ import SingleCard from './components/SingleCard'
 
 // Define an array of objects that contains the image sources for the memory cards
 const cardImages = [
-    { "src": "/img/butterfly.png" },
-    { "src": "/img/flower.png" },
-    { "src": "/img/moon.png" },
-    { "src": "/img/moth.png" },
-    { "src": "/img/timer.png" },
-    { "src": "/img/unicorn.png" },
+    { "src": "/img/butterfly.png", matched: false },
+    { "src": "/img/flower.png", matched: false },
+    { "src": "/img/moon.png", matched: false },
+    { "src": "/img/moth.png", matched: false },
+    { "src": "/img/timer.png", matched: false },
+    { "src": "/img/unicorn.png", matched: false },
 ]
 
 // Define the main App component
@@ -41,14 +41,23 @@ function App() {
     useEffect(() => {
         if (choiceOne && choiceTwo) {
             if (choiceOne.src === choiceTwo.src) {
-                console.log("those cards match!!")
+                setCards(prevCards => {
+                    return prevCards.map(card => {
+                        if (card.src === choiceOne.src) {
+                            return {...card, matched: true}
+                        } else {
+                            return card
+                        }
+                    })
+                })
                 resetTurn()
             } else {
-            console.log("those cards do not match")
-            resetTurn()
+                resetTurn()
             }
         }
     }, [choiceOne, choiceTwo])
+
+    console.log(cards)
 
     // Reset choices and increase turn
     const resetTurn = () => {
